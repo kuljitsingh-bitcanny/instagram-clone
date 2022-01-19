@@ -1,0 +1,202 @@
+.signupContainer{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 2rem 0rem;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.loginLogo{
+    width: 100%;
+    height: 620px;
+    max-width: 454px;
+    display: none;
+}
+
+.wrapper{
+    width:100%;
+    max-width: 350px;
+    position: relative;
+}
+
+@media screen and (min-width:884px) {
+    .loginLogo{
+        display: block;
+    }
+    .wrapper{
+        min-width: 350px;
+    }
+}
+
+
+
+
+.signupContainer .logo{
+    height: 52px;
+    max-width: 196px;
+    margin:2rem auto;
+    display: block;
+}
+.signupCont{
+    display: flex;
+    flex-direction: column;
+    border:1px solid #ccc;
+    align-items: center; 
+}
+
+@media screen and (max-width:360px){
+    .signupCont{
+        border-width: 0px;
+    }
+}
+
+.facebookLoginOptn{
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.facebookLoginOptn > span{
+    font-weight: 600;
+    color:#999;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.signupForm{
+    width: 100%;
+    max-width: 280px;
+}
+
+.signupForm p{
+    margin:1.25rem 0rem 2.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-align: center;
+    color:rgb(136, 135, 135);
+}
+
+
+
+.secondOptn{
+    width: 100%;
+    max-width: 280px;
+    display: block;
+    text-align: center;
+    margin:1.25rem 0rem;
+    font-size: 0.875rem;
+    color:#aaa;
+    position: relative;
+
+}
+.secondOptn::after,
+.secondOptn::before{
+    content:"";
+    width: 40%;
+    top:50%;
+    transform:translateY(-50%);
+    position: absolute;
+    border-top:1px solid #aaa;
+}
+.secondOptn::before{
+    left:0;
+}
+.secondOptn::after{ 
+    right:0;
+}
+.facebookBtn{
+    font-size: 0.75rem !important;
+    padding:0.5rem 0rem !important;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.facebookBtn i{
+    font-size: 1rem;
+    margin-right: 0.375rem;
+    
+}
+
+.loginCont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border:1px solid #ccc;
+    padding:1.25rem 1rem;
+    margin:1.25rem 0rem;
+    flex-wrap: wrap;
+}
+@media screen and (max-width:360px){
+    .loginCont{
+        border-width: 0px;
+    }
+}
+.loginCont a{
+    text-decoration: none;
+    margin-left:0.25rem;
+}
+
+.signupModal{
+    position: absolute;
+    width: 100%;
+    height:100%;
+    top:0;
+    left:0;
+    background-color:rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index:100;
+}
+
+.signupModal > div{
+    transform: scale(0.75);
+}
+
+.finalErrMsgCont span{
+    display: block;
+    padding:1rem 0.5rem;
+    font-size: 0.8125rem;
+    color:rgb(237, 73, 86);
+}
+
+
+.birthdayCont > *,
+.infoConfrmCont > *{
+    max-width: 280px;
+}
+
+
+.birthdayInfoBtn,
+.backBtn,
+.resendCodeBtn{
+    border:0;
+    outline: 0;
+    font-size: 0.8125rem;
+    color:#00a2f8;
+    cursor: pointer;
+    padding-top:0rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+}
+.backBtn{
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+}
+.resendCodeBtn{
+    font-weight: 600;
+    font-size: 0.9375rem;
+    margin-bottom: 0rem;
+}
+
+.nextBtn{
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}

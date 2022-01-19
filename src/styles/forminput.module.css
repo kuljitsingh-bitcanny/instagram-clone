@@ -1,0 +1,106 @@
+.inputWrapper{
+    margin:1rem 0rem;
+}
+.inputCont,
+.pwdInputCont{
+    position: relative;
+}
+.inputCont input,
+.pwdInputCont input{
+    width:100%;
+    padding:1.125rem 0.5rem 0.375rem;
+    outline:none;
+    border:1px solid #ccc;
+    font-size: 14px;
+    border-radius: 4px;
+}
+.pwdInputCont input{
+    padding-right: 3.5rem;
+}
+.inputCont input:focus,
+.pwdInputCont input:focus{
+    border-color: #a8a7a7;
+}
+.inputCont label,
+.pwdInputCont label{
+    top:50%;
+    left:0.5rem;
+    transform: translateY(-50%) scale(1.0);
+    position: absolute;
+    font-size: 12px;
+    color:#a8a7a7;
+    white-space: nowrap;
+    transition: all 0.25s;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    width: 90%;
+}
+.inputCont input:focus + label,
+.pwdInputCont input:focus + label{
+    top:0.25rem;
+    left:-0.1875rem;
+    transform: translateY(0) scale(0.9);
+}
+
+
+.pwdInputCont button{
+    position: absolute;
+    right:0.25rem;
+    border:0px;
+    font-size: 0.875rem;
+    top:50%;
+    background-color: #fff;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.activeLabel{
+    top:0.25rem !important;
+    left:-0.1875rem !important;
+    transform: translateY(0) scale(0.9) !important;
+}
+
+.errMsgCont{
+    color:rgb(237, 73, 86);
+    font-size: 0.8125rem;
+    padding:0rem 0.5rem;
+}
+.inputStatusCont{
+    position: absolute;
+    top:50%;
+    transform: translateY(-40%);
+    right:0.5rem;
+}
+.inputStatusCont i{
+    font-size:1.25rem;
+    
+}
+.crctInputCont input{
+    border-color: #5c636a;
+
+}
+.incrctInputCont input{
+    border-color:rgb(237, 73, 86);
+}
+.crctInputCont input,
+.incrctInputCont input{
+    padding-right:2.25rem;
+}
+
+.crctInputCont input[name="password"],
+.incrctInputCont input[name="password"]{
+    padding-right:5rem;
+}
+.crctInputCont input[name="password"] ~ div,
+.incrctInputCont input[name="password"] ~ div{
+    right:3.375rem !important;
+}
+.incrctInputCont i{
+    color:rgb(237, 73, 86);
+}
+.crctInputCont i{
+    color:#5c636a;
+
+}
+
