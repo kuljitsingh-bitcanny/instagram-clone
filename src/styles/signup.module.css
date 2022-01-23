@@ -15,7 +15,12 @@
     max-width: 454px;
     display: none;
 }
-
+.profileImg{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: -1rem 0rem 0.75rem;
+}
 .wrapper{
     width:100%;
     max-width: 350px;
@@ -30,9 +35,25 @@
         min-width: 350px;
     }
 }
+.invisibleFacebookBtn{
+    display: none;
+}
 
-
-
+.facebookBtn,
+.googleBtn{
+    font-size: 0.75rem !important;
+    padding:0.5rem 0rem !important;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.facebookBtn i,
+.googleBtn i{
+    font-size: 1rem;
+    margin-right: 0.375rem;
+    
+}
 
 .signupContainer .logo{
     height: 52px;
@@ -67,9 +88,8 @@
     margin-bottom: 1rem;
 }
 
-.signupForm{
-    width: 100%;
-    max-width: 280px;
+form{
+    width: 280px;
 }
 
 .signupForm p{
@@ -129,7 +149,7 @@
     justify-content: center;
     border:1px solid #ccc;
     padding:1.25rem 1rem;
-    margin:1.25rem 0rem;
+    margin:1.25rem 0rem 0rem;
     flex-wrap: wrap;
 }
 @media screen and (max-width:360px){
@@ -152,7 +172,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index:100;
+    z-index:1000;
 }
 
 .signupModal > div{
@@ -166,7 +186,7 @@
     color:rgb(237, 73, 86);
 }
 
-
+/* -----------------------------birthday part-------------------------------------- */
 .birthdayCont > *,
 .infoConfrmCont > *{
     max-width: 280px;
@@ -200,3 +220,55 @@
     cursor: pointer;
     margin-bottom: 1rem;
 }
+.phoneNumBtnCont{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding:1rem .5rem 1.5rem;
+}
+.phoneNumBtnCont button{
+    border:0;
+    outline: 0;
+    padding:0;
+    font-size: 0.8125rem;
+    color:#00a2f8;
+    cursor: pointer;
+    background-color: #fff;
+    white-space: nowrap;
+    font-weight: 600;
+}
+.phoneNumBtnCont span{
+    width:2px;
+    height:18px;
+    background-color: #777777;
+    margin:0rem 0.375rem;
+}
+.recaptchaContainer{
+    position: absolute;
+    top:0;
+    left:0;
+    max-width: 100%;
+    width: 100% !important;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.507);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.reasonModalBackBtn,
+.reasonModalLeaveBtn{
+    border:0;
+    outline: 0;
+    font-size: 0.8125rem;
+    color:#00a2f8;
+    cursor: pointer;
+    padding-top:0rem;
+    margin:0 auto;
+    background-color: #fff;
+    display: block;
+}
+.reasonModalLeaveBtn{
+    color:rgb(61, 61, 61);
+}
+

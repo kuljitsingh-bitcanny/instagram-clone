@@ -1,6 +1,7 @@
 import {initializeApp} from "firebase/app";
-import "firebase/auth";
+import { getAuth,onAuthStateChanged} from "firebase/auth";
 import {getFirestore,collection} from "firebase/firestore";
+import {getStorage} from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -14,9 +15,10 @@ const firebaseConfig = {
   };
 
   const app=initializeApp(firebaseConfig);
+  const auth=getAuth()
   const db=getFirestore();
+  const storage=getStorage();
   const userDbRef=collection(db,'users');
 
-
   export default app;
-  export {userDbRef};
+  export {userDbRef,auth,db,onAuthStateChanged};
