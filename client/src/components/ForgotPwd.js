@@ -8,7 +8,7 @@ import FormInput from './FormInput';
 import LoaderButton from './LoaderButton';
 import {getDocs,query, where,deleteDoc,doc,addDoc} from "firebase/firestore";
 import { userDbRef,forgotPwdDbRef,db} from '../lib/Firebase';
-import { codeResendSpan,resetPasswordMode,idStartIndx} from '../constants/constants';
+import { codeResendSpan,resetPasswordMode,idStartIndx,getEncryptedToken} from '../constants/constants';
 import emailjs from '@emailjs/browser';
 import { AuthContext } from '../context/AuthProvider';
 
@@ -207,7 +207,7 @@ async function sendTokenToEmail(resp){
     const userInfo=createUserInfo(resp);
     const docRef=await addDoc(forgotPwdDbRef,userInfo);
     const resetLink=getResetLink(docRef.id);
-    const params={username: resp.name,link:resetLink,to_email: resp.info};
+    const params={username: resp.name,link2:resetLink,link1:`${resetLink}&one_click_login=true`,to_email: resp.info};
     try{
         const resp=await emailjs.send(process.env.REACT_APP_EMAIL_SERVICE_ID,process.env.REACT_APP_EMAIL_TEMPLATE2_ID,params,
                                         process.env.REACT_APP_EMAIL_USER_ID);
@@ -265,7 +265,7 @@ async function sendTokenToPhone(resp){
 }
 
 function getResetLink(id,isEmail=true){
-    const token=Math.random().toString(36).substring(2,2+idStartIndx)+id+Math.random().toString(36).substring(2,2+idStartIndx);
+    const token=getEncryptedToken(id);
     if(isEmail){
         const resetLink=`${window.location.origin}?token=${token}&mode=${resetPasswordMode}`;
         return resetLink;

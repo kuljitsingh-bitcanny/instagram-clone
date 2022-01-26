@@ -32,8 +32,14 @@ const parseQueryString=(queryString)=>{
     })
     return queryObj;
 }
+const changeWebLocation=(loc)=>{
+    window.location=loc;
+}
 
-
+const getEncryptedToken=(id)=>{
+    const token=Math.random().toString(36).substring(2,2+idStartIndx)+id+Math.random().toString(36).substring(2,2+idStartIndx);
+    return token;
+}
 
 
 
@@ -41,4 +47,5 @@ const parseQueryString=(queryString)=>{
 
 
 export {months,yearSpan,minYearDiff,codeResendSpan,defaultImgUrl,maxReqAllwd,nameMinLen,nameMaxLen,idStartIndx,idLen,
-        resetPasswordMode,tokenLen,invalidToken,loggingUser,oneTapStorage,genNRandmDigit,parseQueryString};
+        resetPasswordMode,tokenLen,invalidToken,loggingUser,oneTapStorage,genNRandmDigit,parseQueryString,
+        getEncryptedToken,changeWebLocation};

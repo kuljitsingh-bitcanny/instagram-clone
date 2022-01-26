@@ -19,3 +19,7 @@ export default function createUser(userId,password,fullname,username,email,phone
     }
     return user;
 }
+export function createExistingUser(userId,userDetails,password){
+    const user={...userDetails,userId,password};
+    return user;
+}

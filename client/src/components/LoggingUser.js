@@ -19,7 +19,6 @@ export default function LoggingUser({user,setInvalidTokenMsg,setMode}) {
             const userCrediential=await signInWithEmailAndPassword(auth,user.email,pwd);
             setCurrentUser(userCrediential.user);
             console.log(userCrediential,auth.currentUser);
-            window.location="/";
             setMode(resetPasswordMode);
         }catch(err){
             console.log(err)

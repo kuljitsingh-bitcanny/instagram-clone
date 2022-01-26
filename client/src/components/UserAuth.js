@@ -11,7 +11,7 @@ import ResetPassword from "./ResetPassword";
 export default class UserAuth extends Component{
     constructor(props){
         super(props);
-        this.state={queryPar:{},mode:"",user:{},token:"",
+        this.state={queryPar:{},mode:"",user:{},token:"",oneClickLogin:false,
             invalidTokenMsg:{btnName:"Log in",header:"The link is invalid",body:"Please request a new one and try again."}}
     }
     parseToken=async ()=>{
@@ -31,7 +31,12 @@ export default class UserAuth extends Component{
                         this.setState({mode:invalidToken});
                     }
                     else{
-                        this.setState({mode:loggingUser,user:{...docSnap.data()},token})
+                        if(this.state.queryPar.one_click_login){
+                            this.setState({mode:loggingUser,user:{...docSnap.data()},token,oneClickLogin:true});
+                        }
+                        else{
+                            this.setState({mode:resetPasswordMode,user:{...docSnap.data()},token,oneClickLogin:false});
+                        }
                     }
                 }
                 else{
@@ -63,13 +68,13 @@ export default class UserAuth extends Component{
         if(Object.keys(this.state.queryPar).length && prevState.queryPar !== this.state.queryPar){
             this.parseToken();
         }
-        console.log(this.state,prevState.queryPar)
+        console.log(this.state,prevState.queryPar,this.state.oneClickLogin)
     }
     render(){
         switch(this.state.mode){
             case resetPasswordMode:
                 return <ResetPassword user={this.state.user} setInvalidTokenMsg={this.setInvalidTokenMsg} setMode={this.setMode}
-                                        token={this.state.token}/>
+                                        token={this.state.token} oneClickLogin={this.state.oneClickLogin}/>
             case loggingUser:
                     return <LoggingUser user={this.state.user} setInvalidTokenMsg={this.setInvalidTokenMsg} setMode={this.setMode}/>
             case invalidToken:
