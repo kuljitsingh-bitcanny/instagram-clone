@@ -1,0 +1,147 @@
+.navbarCont{
+    display: flex;
+    flex-direction: row;
+    padding:0.25rem 0rem;
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    border-bottom: 1px solid rgb(197, 197, 197);
+    background-color: #fafafa;
+    justify-content: center;
+    z-index: 100;
+}
+.navbarInnerCont{
+    width: 100%;
+    padding:0rem 1rem;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 935px;
+}
+.navbarInnerCont > *{
+    flex:50%;
+}
+
+.navbarInnerCont img{
+    transform: scale(0.6);
+    pointer-events: none;
+}
+.navbarInnerCont button{
+    border:0;
+    outline: 0;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+@media screen and (max-width:576px) {
+    .navbarInnerCont div:last-child{
+        display: none;
+    }
+    .navbarInnerCont div:first-child{
+        flex: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+
+.formMainCont{
+    width: 100%;
+    padding:7rem 0rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.formContentCont{
+    width: 100%;
+    max-width: 388px;
+    background-color: #fff;
+    border:1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height:584px;
+    border-radius: 4px;
+    position: relative;
+}
+.formContentWrapper{
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.formContentWrapper img{
+    margin:1.5rem 0rem 1rem;
+}
+.formContentWrapper form{
+    width: 100%;
+}
+/* .formContentWrapper form input{
+    display: block;
+    width: 100%;
+    padding:0.625rem 0.5rem;
+    border:1px solid #ccc;
+    outline: none;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+} */
+.formContentWrapper form input:focus{
+    border-color: #a8a7a7;
+}
+
+.formContentWrapper .secondOptn{
+    display: block;
+    text-align: center;
+    margin:1.75rem 0rem 0.75rem;
+    font-size: 0.875rem;
+    color:#aaa;
+    position: relative;
+    width: 100%;
+
+}
+.formContentWrapper .secondOptn::after,
+.formContentWrapper .secondOptn::before{
+    content:"";
+    width: 40%;
+    top:50%;
+    transform:translateY(-50%);
+    position: absolute;
+    border-top:1px solid #aaa;
+}
+.formContentWrapper .secondOptn::before{
+    left:0;
+}
+.formContentWrapper .secondOptn::after{ 
+    right:0;
+}
+.backToLoginBtn{
+    padding:1rem 0rem !important;
+    border:1px solid #ccc !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+
+}
+.loadder{
+    width: 100%;
+    height:100%;
+    background-color: transparent;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.invalidUserCont{
+    position: fixed;
+    bottom: 0;
+    left:0;
+    width: 100%;
+    background-color: #842029;
+    padding:1rem;
+    color:#fff;
+}

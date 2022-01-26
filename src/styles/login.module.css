@@ -97,11 +97,11 @@
     
 }
 .forgetPassBtn{
-    display: block;
-    margin:1.25rem 0rem;
-    font-size: 0.75rem;
-    text-align: center;
-    text-decoration: none;
+    display: block !important;
+    margin:1.25rem 0rem !important;
+    font-size: 0.8125rem !important;
+    text-align: center !important;
+    text-decoration: none !important;
 }
 .signupCont{
     display: flex;
@@ -129,7 +129,7 @@
     height:100%;
     top:0;
     left:0;
-    background-color:rgba(255, 255, 255, 0.3);
+    background-color:rgba(255, 255, 255, 0);
     display: flex;
     align-items: center;
     justify-content: center;

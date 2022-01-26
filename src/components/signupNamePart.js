@@ -8,6 +8,7 @@ import {getDocs,query, where} from "firebase/firestore";
 import { SignupMode } from "./signup";
 import ThirdpartyLoginbtn from "./ThirdpartyLoginBtn";
 import {defaultImgUrl,nameMinLen,nameMaxLen} from "../constants/constants";
+import LoaderButton from "./LoaderButton";
 
 
 class SignupNamePart extends React.Component{
@@ -19,9 +20,9 @@ class SignupNamePart extends React.Component{
     }
     handleSubmit=(e)=>{
         e.preventDefault();
+        this.props.setShowSpinner();
         if(!this.isFormSubmitted){
             this.isFormSubmitted=true;
-            this.props.setShowSpinner();
             this.props.setUserImgUrl(defaultImgUrl);
             if(this.lastSubmittedInput){
                 this.validateInput(this.lastSubmittedInput,this.props.inputs[this.lastSubmittedInput],this.finalInputCheckUp);
@@ -258,7 +259,8 @@ class SignupNamePart extends React.Component{
                 <div className={styles.facebookLoginOptn}>
                     <span>Sign up to see photos and videos from your friends.</span>
                         <div className="d-grid">
-                        <ThirdpartyLoginbtn responseCallback={this.responseCallback} isFacebookLogin={this.state.isFacebookLogin}/>
+                        <ThirdpartyLoginbtn responseCallback={this.responseCallback} isFacebookLogin={this.state.isFacebookLogin}
+                                        initialMsg={"Sign up"}/>
                             
                     </div>
                 </div>
@@ -293,12 +295,9 @@ class SignupNamePart extends React.Component{
                                     isValidationReq={this.props.isValidationReq.password} isPwdInput={true} showPwd={this.state.showPwd}
                                     togglePwdVisibility={this.togglePwdVisibility} invalidMsg={this.props.invalidMsg.password}/>
 
-                        <div className="d-grid">
-                            <Button variant="primary" size="sm" type="submit"
-                                disabled={this.state.disableSubmitBtn || this.props.isThirdpartyLogin}>
-                                Sign up
-                            </Button>
-                        </div>
+                        <LoaderButton type="submit" isDisabled={this.state.disableSubmitBtn || this.props.isThirdpartyLogin}
+                                        showSpinner={this.props.showSpinner} btnName="Sign up"/>
+                       
                         <div className={styles.finalErrMsgCont}>
                             {this.state.hasFinalErr?
                                 <span>{this.state.finalErrMsg}</span>

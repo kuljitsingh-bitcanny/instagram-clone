@@ -7,11 +7,14 @@ import SignupBirthdayPart from "./signupBirthdayPart";
 import SignupNamePart from "./signupNamePart";
 import SignupUserInfoConfrmPart from "./signupUserInfoConfrmPart";
 import ThirdpartyLoginScreen from "./ThirdpartyLoginScreen";
+import { Button } from "react-bootstrap";
+import { DISPLAY_MODE } from "../App";
+import { AuthContext } from "../context/AuthProvider";
 
 const SignupMode={infoInputMode:1,birthdayInputMode:2,userConfirmMode:3,thirdpartySigninMode:4};
 
 class Signup extends React.Component{
-
+    static contextType=AuthContext;
     constructor(props){
         super(props);
         this.state={inputs:{emailOrPhone:"",fullname:"",username:"",password:""},
@@ -108,18 +111,19 @@ class Signup extends React.Component{
                                         resetValidation={this.resetValidation} updateInputStatus={this.updateInputStatus}
                                         changeSignupMode={this.changeSignupMode} updateUserChoice={this.updateUserChoice}
                                         setUserImgUrl={this.setUserImgUrl} changeBirthday={this.changeBirthday} 
-                                        setThirdpartyLoginInfo={this.setThirdpartyLoginInfo} />:
+                                        setThirdpartyLoginInfo={this.setThirdpartyLoginInfo} showSpinner={this.state.showSpinner}/>:
 
                         this.state.signupMode === SignupMode.birthdayInputMode?
                         <SignupBirthdayPart birthday={this.state.birthday} changeBirthday={this.changeBirthday} 
                             changeSignupMode={this.changeSignupMode} resetPassword={this.resetPassword} 
-                            userReqCount={this.state.userReqCount}/>:
+                            userReqCount={this.state.userReqCount} />:
 
                         this.state.signupMode === SignupMode.userConfirmMode?
                         <SignupUserInfoConfrmPart isUserChooseEmail={this.state.isUserChooseEmail} inputs={this.state.inputs}
-                            changeSignupMode={this.changeSignupMode} resetPassword={this.resetPassword} setShowSpinner={this.setShowSpinner}
-                            updatePhoneNum={this.updatePhoneNum} resetShowSpinner={this.resetShowSpinner} 
-                            getUserBirthday={this.getUserBirthday} userImgurl={this.state.userImgurl}/>:
+                                                changeSignupMode={this.changeSignupMode} resetPassword={this.resetPassword} 
+                                                updatePhoneNum={this.updatePhoneNum} resetShowSpinner={this.resetShowSpinner} 
+                                                getUserBirthday={this.getUserBirthday} userImgurl={this.state.userImgurl}
+                                                setShowSpinner={this.setShowSpinner} showSpinner={this.state.showSpinner}/>:
 
                         <ThirdpartyLoginScreen inputs={this.state.inputs} birthday={this.state.birthday} inputStatus={this.state.inputStatus}
                                                 userImgUrl={this.state.userImgurl} isValidationReq={this.state.isValidationReq}
@@ -127,7 +131,8 @@ class Signup extends React.Component{
                                                 changeBirthday={this.changeBirthday} updateInput={this.updateInput} 
                                                 resetValidation={this.resetValidation} updateInputStatus={this.updateInputStatus} 
                                                 resetShowSpinner={this.resetShowSpinner} resetPassword={this.resetPassword} 
-                                                setShowSpinner={this.setShowSpinner} getUserBirthday={this.getUserBirthday}/>
+                                                setShowSpinner={this.setShowSpinner} getUserBirthday={this.getUserBirthday}
+                                                showSpinner={this.state.showSpinner}/>
                                             
                         
 
@@ -135,12 +140,13 @@ class Signup extends React.Component{
                     
                     <div className={styles.loginCont}>
                         <span>Have an account?</span>
-                        <a href="" onClick={this.props.toggleLogin}>Log In</a>
+                        <Button variant="link" className="text-decoration-none ps-1"
+                                onClick={()=>this.context.changeDisplayMode(DISPLAY_MODE.LOGIN_MODE)}>
+                                Log In
+                        </Button>
                     </div>
                     {this.state.showSpinner?
-                        <div className={styles.signupModal}>
-                            <AuthSpinner/>
-                        </div>:
+                        <div className={styles.signupModal}></div>:
                         ""
                     }
                 </div>

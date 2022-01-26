@@ -1,3 +1,5 @@
+
+
 const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const yearSpan=103;
 const minYearDiff=189388800000;// 6 year diff in milli seconds
@@ -6,12 +8,29 @@ const defaultImgUrl="https://firebasestorage.googleapis.com/v0/b/instagram-a9fde
 const maxReqAllwd=3;
 const nameMinLen=3;
 const nameMaxLen=30;
+const idStartIndx=10;//max value should be 10
+const idLen=20;
+const tokenLen=40;
+const resetPasswordMode="resetPassword";
+const invalidToken="invalidToken";
+const loggingUser="loggingUser";
+const oneTapStorage="oneTapStorage";
 const genNRandmDigit=(n)=>{
     const min=10**(n-1);
     const max=((10**n)-1);
     const num=Math.floor((Math.random()*(max-min+1))+min)
     return num;
 
+}
+
+const parseQueryString=(queryString)=>{
+    const queryStrArr=queryString.split("&");
+    const queryObj={};
+    queryStrArr.forEach((queryStr)=>{
+        const [key,value]=queryStr.split("=");
+        queryObj[key]=value;
+    })
+    return queryObj;
 }
 
 
@@ -21,6 +40,5 @@ const genNRandmDigit=(n)=>{
 
 
 
-
-
-export {months,yearSpan,minYearDiff,codeResendSpan,defaultImgUrl,maxReqAllwd,genNRandmDigit,nameMinLen,nameMaxLen};
+export {months,yearSpan,minYearDiff,codeResendSpan,defaultImgUrl,maxReqAllwd,nameMinLen,nameMaxLen,idStartIndx,idLen,
+        resetPasswordMode,tokenLen,invalidToken,loggingUser,oneTapStorage,genNRandmDigit,parseQueryString};

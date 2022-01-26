@@ -5,14 +5,14 @@ import {Button} from "react-bootstrap";
 import {GoogleLogin} from "react-google-login";
 
 
-function ThirdpartyLoginbtn({responseCallback,isFacebookLogin}){
+function ThirdpartyLoginbtn({responseCallback,isFacebookLogin,initialMsg}){
     const [showFacebookLogin,setShowFacebookLogin]=useState(false);
     if(isFacebookLogin){
         return (
             <>
             <Button variant="primary" size="sm" className={styles.facebookBtn} 
                 onClick={()=>setShowFacebookLogin(true)}>
-                <i className="fab fa-facebook-square"></i> Sign up with Facebook
+                <i className="fab fa-facebook-square"></i> {initialMsg} with Facebook
             </Button>
             {showFacebookLogin && <FacebookLogin
                 appId={process.env.REACT_APP_FACEBOOK_APP_ID}
@@ -32,7 +32,7 @@ function ThirdpartyLoginbtn({responseCallback,isFacebookLogin}){
                 clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                 render={renderProps => (
                     <Button variant="primary" size="sm" onClick={renderProps.onClick} className={styles.googleBtn}>
-                        <i className="fab fa-google"></i> Sign up with Google
+                        <i className="fab fa-google"></i> {initialMsg} with Google
                     </Button>
                   )}
                 onSuccess={responseCallback}

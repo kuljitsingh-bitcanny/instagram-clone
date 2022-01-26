@@ -1,0 +1,87 @@
+.navbarParent{
+    background-color: #fafafa;
+    padding:1rem;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #ccc;
+}
+.navbarParent > div{
+    width: 100%;
+    max-width: 935px;
+    margin:0 auto;
+    display: flex;
+    flex-direction: row;
+}
+.navbarParent .navbarIcon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.navbarParent .navbarIcon{
+    cursor: pointer;
+}
+.navbarParent .navbarIcon *{
+    pointer-events: none;
+}
+.navbarParent .navbarIcon > span:first-child i{
+    font-size: 3rem;
+    color:#333;
+    pointer-events: none;
+}
+.navbarParent .navbarIcon > span:nth-child(2){
+    height:3.25rem;
+    width: 1px;
+    background-color: #666;
+    margin:0rem 1rem;
+}
+.navbarParent .navbarIcon button{
+    border:0;
+    outline: 0;
+    background-color: transparent;
+    position: relative;
+    left:-8px;
+    align-self: flex-end;
+
+}
+.navbarParent .navbarIcon button img{
+    width:144px;
+    pointer-events: none;
+}
+.navbarParent .navbarLogin{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.navbarParent .navbarLogin i{
+    font-size: 1.75rem;
+    padding:0rem 0.75rem;
+    color:#666;
+    
+}
+
+
+@media screen and (max-width:576px) {
+    .navbarParent .navbarIcon{
+        padding-right: 0.625rem;
+    }
+    .navbarParent .navbarIcon > span:nth-child(2),
+    .navbarParent .navbarIcon button{
+        display: none;
+    }
+}
+
+.msgContainer{
+    width: 100%;
+    max-width: 935px;
+    padding: 1rem;
+    margin:5rem auto 0rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.msgContainer h2{
+    width: 100%;
+    text-align: center;
+}

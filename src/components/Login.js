@@ -5,19 +5,25 @@ import loginLogo from "../images/app_logo/login-logo.jpg";
 import logo from "../images/app_logo/logo.png";
 import {Button} from "react-bootstrap";
 import FormInput from "./FormInput";
-import {doc, getDocs,query, where} from "firebase/firestore";
-import AuthSpinner from "./AuthSpinner";
+import {getDocs,query, where} from "firebase/firestore";
 import {userDbRef,auth} from "../lib/Firebase";
-import {getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {signInWithEmailAndPassword } from "firebase/auth";
 import {AuthContext} from "../context/AuthProvider";
+import ThirdpartyLoginbtn from "./ThirdpartyLoginBtn";
+import CryptoJS from "crypto-js";
+import ThirdpartyLoginScreenWrapper from "./ThirdpartyLoginScreenWrapper";
+import LoaderButton from "./LoaderButton";
+import { DISPLAY_MODE } from "../App";
 
+
+const searchOutput={str:"str",obj:"obj"};
 class Login extends React.Component{
     static contextType=AuthContext;
     constructor(props){
         super(props);
         this.state={inputs:{emailOrPhoneOrUsername:"",password:""},showPwd:false,disableSubmitBtn:true,showSpinner:false,
-                    invalidMsg:""};
-        this.isFormSubmitted=false
+                    invalidMsg:"",isFacebookLogin:false,newUserInfo:{},showThirdpartyLoginOptn:false};
+        this.isFormSubmitted=false;
     }
     handleSubmit=(e)=>{
         e.preventDefault();
@@ -59,6 +65,7 @@ class Login extends React.Component{
                 this.context.setCurrentUser(userCredential.user);
                 console.log(userCredential,"user creaiential")
                 //move to home page
+                this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
             }
             catch(err){
                 this.showInvalidCredentialMsg(true);
@@ -85,17 +92,63 @@ class Login extends React.Component{
             return {showPwd:!state.showPwd}
         })
     }
-    async searchUserByKeyName(keyname,keyval){
+    responseCallback=async(resp)=>{
+        console.log("calling repsonse ",resp);
+        const userEmail=resp.profileObj?resp.profileObj.email:resp.email;
+        const output=await this.searchUserByKeyName("email",userEmail,searchOutput.obj);
+        this.setState({showSpinner:true});
+        if(Object.keys(output).length){
+            console.log(output);
+            const  pwd = CryptoJS.AES.decrypt(output.password, output.userId).toString(CryptoJS.enc.Utf8);
+            try{
+                const userCredential=await signInWithEmailAndPassword(auth,userEmail,pwd);
+                this.context.setCurrentUser(userCredential.user);
+                console.log(userCredential,"user creaiential")
+                this.setState({showSpinner:false})
+                //move to home page
+                this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
+            }
+            catch(err){
+                this.setState({invalidMsg:"Sorry,something went wrong logging your account. Please try again soon."})
+            }
+        }
+        else{
+            const newResp={}
+            if(this.state.isFacebookLogin){
+                const birthdayArr=resp.birthday.split("/");
+                newResp.inputs={emailOrPhone:resp.email,fullname:resp.name,username:"",password:""};
+                newResp.birthday={year:birthdayArr[2],month:parseInt(birthdayArr[0])-1,day:birthdayArr[1]};
+                newResp.imgUrl=resp.picture.data.url;
+            }
+            else{
+                const profileObj=resp.profileObj;
+                newResp.inputs={emailOrPhone:profileObj.email,fullname:profileObj.name,username:"",password:""};
+                newResp.birthday={year:"",month:"",day:""};
+                newResp.imgUrl=profileObj.imageUrl;
+            }
+            this.setState({newUserInfo:{...newResp},showThirdpartyLoginOptn:true,showSpinner:false})
+        }
+        
+
+    }
+
+    setShowSpinner=()=>{
+        this.setState({showSpinner:true});
+    }
+    resetShowSpinner=()=>{
+        this.setState({showSpinner:false});
+    }
+    async searchUserByKeyName(keyname,keyval,outputType=searchOutput.str){
         const q=query(userDbRef,where(keyname,"==",keyval))
         const querySnapshot=await getDocs(q);
         console.log(querySnapshot);
         if(querySnapshot.empty){
-            return "";
+            return outputType===searchOutput.str?"":{};
         }
         else{
-            let email;
-            querySnapshot.forEach((doc)=>email=doc.data().email);
-            return email;
+            let output;
+            querySnapshot.forEach((doc)=>output=outputType===searchOutput.str?doc.data().email:{...doc.data()});
+            return output;
         }
     }
 
@@ -104,54 +157,54 @@ class Login extends React.Component{
             <Container className={styles.loginContainer}>
                 <img src={loginLogo} className={styles.loginLogo}/>
                 <div className={styles.wrapper}>
-                    <div className={styles.loginCont}>
-                        <img src={logo} className={styles.logo}/>
-                        <div className={styles.loginForm}>
-                            <form onSubmit={this.handleSubmit} method="POST">
-                                <FormInput isInputValid={true} inputName="emailOrPhoneOrUsername" inputType="text"
-                                            inputValue={this.state.inputs.emailOrPhoneOrUsername} handleChange={this.handleChange}
-                                            inputHint="Phone number, username or email" isValidationReq={false}
-                                            handleFocus={this.handleFocus}/>
+                    {this.state.showThirdpartyLoginOptn?
+                        <ThirdpartyLoginScreenWrapper userInfo={this.state.newUserInfo} showSpinner={this.state.showSpinner}
+                                        setShowSpinner={this.setShowSpinner} resetShowSpinner={this.resetShowSpinner}/>:
+                        <div className={styles.loginCont}>
+                            <img src={logo} className={styles.logo}/>
+                            <div className={styles.loginForm}>
+                                <form onSubmit={this.handleSubmit} method="POST">
+                                    <FormInput isInputValid={true} inputName="emailOrPhoneOrUsername" inputType="text"
+                                                inputValue={this.state.inputs.emailOrPhoneOrUsername} handleChange={this.handleChange}
+                                                inputHint="Phone number, username or email" isValidationReq={false}
+                                                handleFocus={this.handleFocus}/>
 
-                                <FormInput isInputValid={true} inputName="password" inputValue={this.state.inputs.password} 
-                                            inputHint="Password" inputType="password" isValidationReq={false}
-                                            handleChange={this.handleChange} showPwd={this.state.showPwd}   
-                                            isPwdInput={true} togglePwdVisibility={this.togglePwdVisibility}
-                                            handleFocus={this.handleFocus}/>
+                                    <FormInput isInputValid={true} inputName="password" inputValue={this.state.inputs.password} 
+                                                inputHint="Password" inputType="password" isValidationReq={false}
+                                                handleChange={this.handleChange} showPwd={this.state.showPwd}   
+                                                isPwdInput={true} togglePwdVisibility={this.togglePwdVisibility}
+                                                handleFocus={this.handleFocus}/>
 
-                                <div className="d-grid">
-                                    <Button variant="primary" size="sm" disabled={this.state.disableSubmitBtn} type="submit">
-                                        Log In
-                                    </Button>
-                                </div>
-                                
-                            </form>
-                            <span className={styles.secondOptn}>OR</span>
-                            <div className="d-grid">
-                                <Button variant="primary" size="sm" className={styles.facebookBtn}>
-                                <i className="fab fa-facebook-square"></i> Log in with Facebook
+                                    <LoaderButton showSpinner={this.state.showSpinner} isDisabled={this.state.disableSubmitBtn} type="submit" btnName="Log in"/>
+                                    
+                                </form>
+                                <span className={styles.secondOptn}>OR</span>
+                                <ThirdpartyLoginbtn responseCallback={this.responseCallback} isFacebookLogin={this.state.isFacebookLogin}
+                                                    initialMsg={"Continue"}/>
+                                { this.state.invalidMsg.length>0 && 
+                                    <div className={styles.errMsgCont}>
+                                        <span className="text-center">{this.state.invalidMsg}</span>
+                                    </div>
+                                }
+                                <Button variant="link" className={styles.forgetPassBtn} 
+                                        onClick={e=>this.context.changeDisplayMode(DISPLAY_MODE.FORGOT_PWD_MODE)}>
+                                        Forget password?
                                 </Button>
                             </div>
-                            { this.state.invalidMsg.length>0 && 
-                                <div className={styles.errMsgCont}>
-                                    <span className="text-center">{this.state.invalidMsg}</span>
-                                </div>
-                            }
-                            <a href="#" className={styles.forgetPassBtn}>Forget password?</a>
                         </div>
-                    </div>
+                    }
                     <div className={styles.signupCont}>
                         <span>Don't have account?</span>
-                        <a href="" onClick={this.props.toggleLogin}>Sign Up</a>
+                        <Button variant="link" className="text-decoration-none ps-1" 
+                                onClick={()=>this.context.changeDisplayMode(DISPLAY_MODE.SIGNUP_MODE)}>
+                                Sign Up
+                        </Button>
                     </div>
                     {this.state.showSpinner?
-                        <div className={styles.loginModal}>
-                            <AuthSpinner/>
-                        </div>:
+                        <div className={styles.loginModal}></div>:
                         ""
                     }
                 </div>
-                
             </Container>
         )
     }

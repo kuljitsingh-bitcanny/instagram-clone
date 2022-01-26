@@ -5,6 +5,7 @@ import {Row,Col,Button,Form,Modal} from "react-bootstrap";
 import { maxReqAllwd, minYearDiff, months,yearSpan} from "../constants/constants";
 import { SignupMode } from "./signup";
 import lockImg from "../images/app_logo/lock.png";
+import LoaderButton from "./LoaderButton";
 
 class SignupBirthdayPart extends React.Component{
     constructor(props){
@@ -120,8 +121,8 @@ class SignupBirthdayPart extends React.Component{
                             You need to enter the date you were born</p>
                     <p className="text-muted" style={{fontSize:"0.75rem",textAlign:"center"}}>
                             Use your own birthday, even if this account is for a business, a pet, or something else</p>
-                    <Button variant="primary" size="sm" className={styles.nextBtn}  disabled={!this.state.enableNextBtn}
-                        onClick={this.checkReqCountAndConfirmUser}>Next</Button>
+                    <LoaderButton type="button" clickHandler={this.checkReqCountAndConfirmUser} isDisabled={!this.state.enableNextBtn}
+                                    cssClass={styles.nextBtn} showSpinner={this.props.showSpinner} btnName="Next"/>
                     <button type="button" className={styles.backBtn} onClick={this.goBackToNameMode}>Go Back</button>
                 </div>
                 <BirthdayInfoModal

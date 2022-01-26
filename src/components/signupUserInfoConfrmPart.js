@@ -3,17 +3,20 @@ import styles from "../styles/signup.module.css";
 import emailConfrmLogo from "../images/app_logo/email_confrm_code.png";
 import phoneConfrmLogo from "../images/app_logo/phone_confrm_code.png";
 import FormInput  from "./FormInput";
-import {Button} from "react-bootstrap";
 import {userDbRef,auth,db} from "../lib/Firebase";
 import {getDocs,query, where,setDoc,doc,} from "firebase/firestore";
 import { genNRandmDigit,codeResendSpan} from "../constants/constants";
 import emailjs from '@emailjs/browser';
-import {signInWithPhoneNumber,RecaptchaVerifier,createUserWithEmailAndPassword} from "firebase/auth";
+import {createUserWithEmailAndPassword} from "firebase/auth";
 import createUser from "../helpers/User";
 import { SignupMode } from "./signup";
 import CryptoJS from "crypto-js";
+import LoaderButton from "./LoaderButton";
+import { AuthContext } from "../context/AuthProvider";
+import { DISPLAY_MODE } from "../App";
 
 class SignupUserInfoConfrmPart extends React.Component{
+    static contextType=AuthContext;
     constructor(props){
         super(props);
         this.state={confirmationCode:"",disableSubmitBtn:true,generatedCode:"",newPhoneNumber:"",isPhoneNumValid:false,
@@ -166,6 +169,8 @@ class SignupUserInfoConfrmPart extends React.Component{
             await setDoc(doc(db, "users", userCredential.user.uid), user);
             console.log(userCredential,"user created",user);
             // move to home page (implement)
+            this.context.setCurrentUser(userCredential.user);
+            this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
         }
         catch(err){
             console.log(err);
@@ -186,6 +191,8 @@ class SignupUserInfoConfrmPart extends React.Component{
             await setDoc(doc(db, "users", userCredential.user.uid), user);
             console.log("ueser created" );
             // move to home page (implement)
+            this.context.setCurrentUser(userCredential.user);
+            this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
         }
         catch(err){
             this.isFormSubmitted=false;
@@ -303,12 +310,8 @@ class SignupUserInfoConfrmPart extends React.Component{
                                                 inputHint={this.props.isUserChooseEmail?"Confirmation Code":"######"}
                                                 inputType="text" handleChange={this.handleChange} handleBlur={this.handleBlur} 
                                                 handleFocus={this.handleFocus} isValidationReq={false} />
-                                    <div className="d-grid" id="sign-in-button">
-                                        <Button variant="primary" size="sm" type="submit"
-                                            disabled={this.state.disableSubmitBtn}>
-                                            {this.props.isUserChooseEmail?"Next":"Confirm"}
-                                        </Button>
-                                    </div>
+                                    <LoaderButton isDisabled={this.state.disableSubmitBtn} btnName={this.props.isUserChooseEmail?"Next":"Confirm"} 
+                                                type="submit" showSpinner={this.props.showSpinner}/>
                                     {this.state.verificationMsg &&
                                         <div className={styles.finalErrMsgCont}>
                                             <span className="text-center">{this.state.verificationMsg}</span>
@@ -335,12 +338,8 @@ class SignupUserInfoConfrmPart extends React.Component{
                                                 handleChange={this.handleChange} handleBlur={this.handleBlur} 
                                                 handleFocus={this.handleFocus} isValidationReq={this.state.phoneNumValidationReq} 
                                                 invalidMsg={this.state.phoneNumInvalidMsg}/>
-                                    <div className="d-grid">
-                                        <Button variant="primary" size="sm" type="submit"
-                                            disabled={this.state.disableSubmitBtn}>
-                                            Change
-                                        </Button>
-                                    </div>
+                                    <LoaderButton isDisabled={this.state.disableSubmitBtn} btnName="Change" type="submit"
+                                                    showSpinner={this.props.showSpinner}/>
                                 </form>
                                 <button type="button" className={`${styles.backBtn}  mt-3 d-block me-auto ms-auto`}
                                     onClick={this.toggleShowConfirmationCodeFormWithoutCapcha}>

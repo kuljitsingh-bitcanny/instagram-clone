@@ -4,6 +4,7 @@ import {getFirestore,collection} from "firebase/firestore";
 import {getStorage} from "firebase/storage";
 
 
+
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
     authDomain:process.env.REACT_APP_AUTH_DOMAIN,
@@ -19,6 +20,8 @@ const firebaseConfig = {
   const db=getFirestore();
   const storage=getStorage();
   const userDbRef=collection(db,'users');
+  const forgotPwdDbRef=collection(db,"forgotpwd");
+  const oneTapStorageDbRef=collection(db,"oneTapStorage");
 
   export default app;
-  export {userDbRef,auth,db,onAuthStateChanged};
+  export {userDbRef,auth,db,forgotPwdDbRef,oneTapStorageDbRef,onAuthStateChanged};

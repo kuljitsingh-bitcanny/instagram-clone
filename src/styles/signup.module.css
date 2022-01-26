@@ -55,7 +55,8 @@
     
 }
 
-.signupContainer .logo{
+.signupContainer .logo,
+.signupCont .logo{
     height: 52px;
     max-width: 196px;
     margin:2rem auto;
@@ -168,15 +169,11 @@ form{
     height:100%;
     top:0;
     left:0;
-    background-color:rgba(255, 255, 255, 0.3);
+    background-color:rgba(255, 255, 255, 0);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index:1000;
-}
-
-.signupModal > div{
-    transform: scale(0.75);
 }
 
 .finalErrMsgCont span{

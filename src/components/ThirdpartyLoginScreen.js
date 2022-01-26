@@ -2,7 +2,7 @@ import React,{ Component } from "react";
 import logo from "../images/app_logo/logo.png";
 import styles from "../styles/signup.module.css";
 import FormInput from "../components/FormInput";
-import {Button,Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import {userDbRef,auth,db} from "../lib/Firebase";
 import {getDocs,query, where,setDoc,doc} from "firebase/firestore";
 import { SignupMode } from "./signup";
@@ -11,9 +11,13 @@ import {createUserWithEmailAndPassword} from "firebase/auth";
 import createUser from "../helpers/User";
 import {nameMaxLen,nameMinLen} from "../constants/constants";
 import CryptoJS from "crypto-js";
+import LoaderButton from "./LoaderButton";
+import { AuthContext } from "../context/AuthProvider";
+import { DISPLAY_MODE } from "../App";
 
 
 class ThirdpartyLoginScreen extends Component{
+    static contextType=AuthContext;
     constructor(props){
         super(props);
         this.state={showPwd:false,disableSubmitBtn:true,hasFinalErr:false,finalErrMsg:"",showBirthdayPart:false,
@@ -162,6 +166,8 @@ class ThirdpartyLoginScreen extends Component{
                                     "google");
                 await setDoc(doc(db, "users", userCredential.user.uid), user);
                 //move to home page(implement)
+                this.context.setCurrentUser(userCredential.user);
+                this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
                 console.log("user created");
             }catch(err){
                 this.props.resetShowSpinner();
@@ -180,6 +186,8 @@ class ThirdpartyLoginScreen extends Component{
                                 "facebook");
             await setDoc(doc(db, "users", userCredential.user.uid), user);
             //move to home page(implement)
+            this.context.setCurrentUser(userCredential.user);
+            this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
             console.log("user created");
         }catch(err){
             this.isFormSubmitted=false;
@@ -236,13 +244,14 @@ class ThirdpartyLoginScreen extends Component{
         }
         
     }
+    
     render(){
         if(this.state.showBirthdayPart){
             return (
                 <>
                     <SignupBirthdayPart birthday={this.props.birthday} changeBirthday={this.props.changeBirthday} 
                                 changeSignupMode={this.changeSignupMode} resetPassword={this.props.resetPassword} 
-                                userReqCount={this.props.userReqCount}/>
+                                userReqCount={this.props.userReqCount} showSpinner={this.props.showSpinner}/>
                     <UsercreationFailedModal
                         show={this.state.showUsercreationFailed}
                         onHide={this.hideUsercreationFailedModal}
@@ -275,12 +284,9 @@ class ThirdpartyLoginScreen extends Component{
                                     isValidationReq={this.props.isValidationReq.password} isPwdInput={true} showPwd={this.state.showPwd}
                                     togglePwdVisibility={this.togglePwdVisibility} invalidMsg={this.props.invalidMsg.password}/>
 
-                        <div className="d-grid">
-                            <Button variant="primary" size="sm" type="submit"
-                                disabled={this.state.disableSubmitBtn}>
-                                Sign up
-                            </Button>
-                        </div>
+                        <LoaderButton isDisabled={this.state.disableSubmitBtn} btnName="Sign up" type="submit" 
+                                        showSpinner={this.props.showSpinner}/>
+
                         <div className={styles.finalErrMsgCont}>
                             {this.state.hasFinalErr?
                                 <span className="text-center">{this.state.finalErrMsg}</span>
