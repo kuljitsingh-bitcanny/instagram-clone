@@ -10,12 +10,10 @@ const app= express();
 app.use(cors({
     origin:process.env.ALLOWED_ORIGIN
 }))
-console.log("allowed origin",process.env.ALLOWED_ORIGIN);
+
 app.get("/",async (req,res)=>{
     if(req.headers.origin === process.env.ALLOWED_ORIGIN){
-        console.log(req.headers.origin,req.query,"req from");
         const id=req.query.token.toString().substring(process.env.ID_START_INDX,process.env.ID_END_INDX);
-        console.log("id",id);
         try{
             await admin.auth().deleteUser(id);
             res.json({status:true});
