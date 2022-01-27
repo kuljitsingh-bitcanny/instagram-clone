@@ -14,7 +14,7 @@ class AuthProvider extends React.Component{
         this.state={
             value:{firebase:firebase,currentUser:null,setCurrentUser:this.checkAndSetCurrentUser,curMode:"",
                     changeDisplayMode:this.changeDisplayMode,checkAndChangeDisplayMode:this.checkAndChangeDisplayMode,
-                    oneTapStorageDetails:[]},
+                    oneTapStorageDetails:[],oneTapStorageId:"",updateOneTapStorage:this.updateOneTapStorage},
             isUserDataLoaded:false,
         }
         this.oneTabStorageToken=window.localStorage.getItem(oneTapStorage) || "";
@@ -37,7 +37,7 @@ class AuthProvider extends React.Component{
         }
         else{
             //implement else part
-            this.setState({isUserDataLoaded:true});
+            this.setState({isUserDataLoaded:true,currentUser:null});
         }
     }
     checkAndChangeDisplayMode=()=>{
@@ -45,7 +45,12 @@ class AuthProvider extends React.Component{
             this.changeDisplayMode(DISPLAY_MODE.HOME_MODE)
         }
         else{
-            this.changeDisplayMode(DISPLAY_MODE.LOGIN_MODE);
+            if(this.state.value.oneTapStorageDetails.length){
+                this.changeDisplayMode(DISPLAY_MODE.ONE_TAP_LOGIN_MODE);
+            }
+            else{
+                this.changeDisplayMode(DISPLAY_MODE.LOGIN_MODE);
+            }
         }
     }
     checkAndLoadOneTapUserDetails= async ()=>{
@@ -55,18 +60,18 @@ class AuthProvider extends React.Component{
             if(docSnap.exists()){
                 const {details}=docSnap.data();
                 this.setState(()=>{
-                    return {value:{...this.state.value,oneTapStorageDetails:[...details]},isUserDataLoaded:false};
+                    return {value:{...this.state.value,oneTapStorageDetails:[...details],oneTapStorageId:id},isUserDataLoaded:false};
                 })
             }
             else{
                 this.setState(()=>{
-                    return {value:{...this.state.value,oneTapStorageDetails:[]},isUserDataLoaded:false};
+                    return {value:{...this.state.value,oneTapStorageDetails:[],oneTapStorageId:""},isUserDataLoaded:false};
                 })
             }
         }
         else{
             this.setState(()=>{
-                return {value:{...this.state.value,oneTapStorageDetails:[]},isUserDataLoaded:false};
+                return {value:{...this.state.value,oneTapStorageDetails:[],oneTapStorageId:""},isUserDataLoaded:false};
             })
 
         }
@@ -77,7 +82,13 @@ class AuthProvider extends React.Component{
     componentDidMount(){
         this.checkAndLoadOneTapUserDetails();  
     }
-    
+    updateOneTapStorage=(id)=>{
+        const newStorageArr=this.state.value.oneTapStorageDetails.filter((detail)=>detail.id!==id);
+        this.setState((state)=>{
+            return {value:{...state.value,oneTapStorage:[...newStorageArr]}};
+        })
+
+    }    
     render(){
         return (
             <AuthContext.Provider value={this.state.value}>

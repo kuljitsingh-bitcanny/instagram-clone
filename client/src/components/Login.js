@@ -21,7 +21,7 @@ class Login extends React.Component{
     static contextType=AuthContext;
     constructor(props){
         super(props);
-        this.state={inputs:{emailOrPhoneOrUsername:"",password:""},showPwd:false,disableSubmitBtn:true,showSpinner:false,
+        this.state={inputs:{emailOrPhoneOrUsername:this.props.username,password:this.props.password},showPwd:false,disableSubmitBtn:true,showSpinner:false,
                     invalidMsg:"",isFacebookLogin:false,newUserInfo:{},showThirdpartyLoginOptn:false};
         this.isFormSubmitted=false;
     }

@@ -7,11 +7,11 @@ import { Button } from 'react-bootstrap';
 import CryptoJS from 'crypto-js';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/Firebase';
-import { invalidToken, resetPasswordMode } from '../constants/constants';
+import { invalidToken, resetPasswordMode,changeWebLocation } from '../constants/constants';
 
 
 export default function LoggingUser({user,setInvalidTokenMsg,setMode}) {
-    const {changeDisplayMode,setCurrentUser,checkAndChangeDisplayMode}=useContext(AuthContext)
+    const {setCurrentUser}=useContext(AuthContext)
     useEffect(async ()=>{
         console.log(user.password,user.userId)
         const pwd=CryptoJS.AES.decrypt(user.password,user.userId).toString(CryptoJS.enc.Utf8);
@@ -23,7 +23,7 @@ export default function LoggingUser({user,setInvalidTokenMsg,setMode}) {
         }catch(err){
             console.log(err)
             setMode(invalidToken);
-            setInvalidTokenMsg({btnName:"Log in",header:"Error",body:"This page could not be loaded. If you have cookies disabled in your browser, or you are browsing in Private Mode, please try enabling cookies or turning off Private Mode, and then retrying your action."})
+            setInvalidTokenMsg({btnName:(user?user.name:"Log in"),header:"Error",body:"This page could not be loaded. If you have cookies disabled in your browser, or you are browsing in Private Mode, please try enabling cookies or turning off Private Mode, and then retrying your action."})
         }
 
     },[])
@@ -31,7 +31,7 @@ export default function LoggingUser({user,setInvalidTokenMsg,setMode}) {
     <div>
         <div className={styles.navbarParent}>
             <div>
-                <div className={styles.navbarIcon} onClick={checkAndChangeDisplayMode}>
+                <div className={styles.navbarIcon} onClick={e=>changeWebLocation("/")}>
                     <span><i className="fab fa-instagram"></i></span>
                     <span></span>
                     <button><img src={logo} alt=""/></button>

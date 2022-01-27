@@ -141,7 +141,7 @@ class Signup extends React.Component{
                     <div className={styles.loginCont}>
                         <span>Have an account?</span>
                         <Button variant="link" className="text-decoration-none ps-1"
-                                onClick={()=>this.context.changeDisplayMode(DISPLAY_MODE.LOGIN_MODE)}>
+                                onClick={()=>this.context.checkAndChangeDisplayMode()}>
                                 Log In
                         </Button>
                     </div>

@@ -2,6 +2,7 @@
 const express=require("express");
 const cors=require("cors");
 const admin=require("firebase-admin");
+const CryptoJS = require("crypto-js");
 require("dotenv").config();
 
 
@@ -11,18 +12,22 @@ app.use(cors({
     origin:process.env.ALLOWED_ORIGIN
 }))
 
-app.get("/",async (req,res)=>{
+app.use(express.json())
+
+app.post("/",async (req,res)=>{
     if(req.headers.origin === process.env.ALLOWED_ORIGIN){
-        const id=req.query.token.toString().substring(process.env.ID_START_INDX,process.env.ID_END_INDX);
+        const {token,pwd:encPwd}=req.body;
         try{
-            await admin.auth().deleteUser(id);
+            const rawPwd=CryptoJS.AES.decrypt(encPwd,process.env.PWD_ENCYP_KEY).toString(CryptoJS.enc.Utf8);
+            const uid=token.toString().substring(process.env.ID_START_INDX,process.env.ID_END_INDX);
+            await admin.auth().updateUser(uid,{password:rawPwd});
             res.json({status:true});
         }
         catch(err){
             res.json({status:false});
         }
+        
     }
-    
     else{
         res.sendStatus(404);
     }

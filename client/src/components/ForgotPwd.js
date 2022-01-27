@@ -48,7 +48,7 @@ function ForgotPwdForm(){
     const handleSubmit=async (e)=>{
         e.preventDefault();
         if(!formCheckResp.isFormSubmitted){
-            setFormCheckResp(()=>{ return {...formCheckResp,isFormSubmitted:true}});
+            setFormCheckResp((prevState)=>{ return {...prevState,isFormSubmitted:true}});
             const result= await isUserExistByValue(name);
             console.log(name,formCheckResp,result);
             if(result.status){
@@ -74,17 +74,17 @@ function ForgotPwdForm(){
                             msgBody2:result.info,msgBody3:" with a link to get back into your account. Please check your email or try again after some time."});
                     }
                 }
-                setFormCheckResp(()=>{return{...formCheckResp,showModal:true}});
+                setFormCheckResp((prevState)=>{return{...prevState,showModal:true}});
             }
             else{
-                setFormCheckResp(()=>{return{isFormSubmitted:false,isUserExist:false}})
+                setFormCheckResp((prevState)=>{return{...prevState,isFormSubmitted:false,isUserExist:false}})
             }
         }
         
     }
     const handleChange=(e)=>{
         setName(e.target.value);
-        setFormCheckResp(()=>{return {...formCheckResp,isUserExist:true}});
+        setFormCheckResp((prevState)=>{return {...prevState,isUserExist:true}});
     }
     const transToLogin=(e)=>{
         changeDisplayMode(DISPLAY_MODE.LOGIN_MODE);

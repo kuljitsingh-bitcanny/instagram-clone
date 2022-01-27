@@ -42,6 +42,7 @@ export default class UserAuth extends Component{
                 else{
                     this.setInvalidTokenMsg({btnName:"Log in",header:"The link is invalid",body:"Please request a new one and try again."});
                     this.setState({mode:invalidToken});
+                    
                 }
             }
             else{

@@ -16,14 +16,13 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 export default function ResetPassword({user,setMode,setInvalidTokenMsg,token,oneClickLogin}) {
-    console.log(oneClickLogin)
     const {changeDisplayMode,checkAndChangeDisplayMode}=useContext(AuthContext);
     const [passwords,setPasswords]=useState({password1:"",password2:""});
     const [invalidPwdMsg,setInvalidPwdMsg]=useState("");
     const [showSpinner,setShowSpinner]=useState(false);
     const isFormSubmitted=useRef(false);
     const handleChange=(e)=>{
-        setPasswords(()=>{return {...passwords,[e.target.name]:e.target.value}});
+        setPasswords((passwords)=>{return {...passwords,[e.target.name]:e.target.value}});
     }
     const handleSubmit=async (e)=>{
         e.preventDefault();
@@ -62,14 +61,9 @@ export default function ResetPassword({user,setMode,setInvalidTokenMsg,token,one
         else{
             try{
                 const curUser=auth.currentUser;
-                const resp1=await updatePassword(curUser,passwords.password1);
-                const newPwd=CryptoJS.AES.encrypt(passwords.password1,user.userId).toString();
-                const docRef=doc(userDbRef,user.userId);
-                const resp2=await updateDoc(docRef,{"password":newPwd});
-                console.log(resp1,resp2,token);
-                await deleteDoc(doc(forgotPwdDbRef,token));
-                //changeDisplayMode(DISPLAY_MODE.HOME_MODE);
-                window.location="/"; //login in user with new password
+                await updatePassword(curUser,passwords.password1);
+                await updateUserPasswordInDb();
+                 //login in user with new password
 
             }catch(err){
                 console.log(err)
@@ -81,19 +75,13 @@ export default function ResetPassword({user,setMode,setInvalidTokenMsg,token,one
     }
     const handlePasswordReset=async ()=>{
         try{
-            const resp=await fetch(`${process.env.REACT_APP_DEL_URL}?token=${getEncryptedToken(user.userId)}`);
+            const url=process.env.REACT_APP_DEL_URL;
+            const reqData={token:getEncryptedToken(user?.userId),
+                            pwd:CryptoJS.AES.encrypt(passwords.password1,process.env.REACT_APP_PWD_ENCYP_KEY).toString()};
+            const resp=await fetch(url,{method:"POST",headers: {'Content-Type': 'application/json'},body: JSON.stringify(reqData)});
             const data=await resp.json();
-            const userCredential=await createUserWithEmailAndPassword(auth,user.email,passwords.password1);
-            const prevUserCred=await getDoc(doc(userDbRef,user.userId));
-            const prevUser=prevUserCred.data();
-            const newPwd=CryptoJS.AES.encrypt(passwords.password1,userCredential.user.uid).toString();
-            const newUser=createExistingUser(userCredential.user.uid,prevUser,newPwd);
-            console.log(prevUser,newUser);
-            await setDoc(doc(userDbRef,userCredential.user.uid),newUser);
-            await deleteDoc(doc(userDbRef,user.userId));
-            await deleteDoc(doc(forgotPwdDbRef,token));
-            changeWebLocation("/");
-           // if(!data.status) throw new Error();
+            if(!data.status) throw new Error();
+            await updateUserPasswordInDb();
             console.log(data);
         }catch(err){
             console.log(err)
@@ -101,12 +89,14 @@ export default function ResetPassword({user,setMode,setInvalidTokenMsg,token,one
             setInvalidTokenMsg({btnName:"Log in",header:"Error",body:"This page could not be loaded. If you have cookies disabled in your browser, or you are browsing in Private Mode, please try enabling cookies or turning off Private Mode, and then retrying your action."});
         }
         
-        //
-        // const 
-        // const userCredential=await getDoc(doc(userDbRef,user.userId));
-        // const data=userCredential.data();
-        // 
-        // console.log(user,userCredential)
+    }
+
+    const updateUserPasswordInDb=async ()=>{
+        const newPwd=CryptoJS.AES.encrypt(passwords.password1,user.userId).toString();
+        const docRef=doc(userDbRef,user.userId);
+        await updateDoc(docRef,{"password":newPwd});
+        await deleteDoc(doc(forgotPwdDbRef,token));
+        changeWebLocation("/");
     }
   return (
     <div className={styles.mainParent}>
