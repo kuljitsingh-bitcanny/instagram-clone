@@ -9,7 +9,7 @@ import { SignupMode } from "./signup";
 import SignupBirthdayPart from "./signupBirthdayPart";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import createUser from "../helpers/User";
-import {nameMaxLen,nameMinLen} from "../constants/constants";
+import {changeWebLocation, nameMaxLen,nameMinLen} from "../constants/constants";
 import CryptoJS from "crypto-js";
 import LoaderButton from "./LoaderButton";
 import { AuthContext } from "../context/AuthProvider";
@@ -161,13 +161,13 @@ class ThirdpartyLoginScreen extends Component{
             try{
                 const userCredential=await createUserWithEmailAndPassword(auth,this.props.inputs.emailOrPhone,this.props.inputs.password);
                 const pwd=CryptoJS.AES.encrypt(this.props.inputs.password,userCredential.user.uid).toString()
-                const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username,
+                const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username.toLowerCase(),
                                     this.props.inputs.emailOrPhone,"",this.props.userImgUrl,this.props.getUserBirthday(),
                                     "google");
                 await setDoc(doc(db, "users", userCredential.user.uid), user);
                 //move to home page(implement)
                 this.context.setCurrentUser(userCredential.user);
-                this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
+                window.location.reload();
                 console.log("user created");
             }catch(err){
                 this.props.resetShowSpinner();
@@ -181,13 +181,13 @@ class ThirdpartyLoginScreen extends Component{
         try{
             const userCredential=await createUserWithEmailAndPassword(auth,this.props.inputs.emailOrPhone,this.props.inputs.password);
             const pwd=CryptoJS.AES.encrypt(this.props.inputs.password,userCredential.user.uid).toString()
-            const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username,
+            const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username.toLowerCase(),
                                 this.props.inputs.emailOrPhone,"",this.props.userImgUrl,this.props.getUserBirthday(),
                                 "facebook");
             await setDoc(doc(db, "users", userCredential.user.uid), user);
             //move to home page(implement)
             this.context.setCurrentUser(userCredential.user);
-            this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
+            window.location.reload();
             console.log("user created");
         }catch(err){
             this.isFormSubmitted=false;

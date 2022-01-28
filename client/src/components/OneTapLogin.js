@@ -89,7 +89,6 @@ export default function OneTapLogin(props) {
         dispatch({type:ACTIONS.SHOW_LOADDER,payload:{id}});
         try{
             const docSnap=await getDoc(doc(userDbRef,id));
-            console.log(docSnap);
             if(docSnap.exists()){
                 const data=docSnap.data();
                 const pwd=CryptoJS.AES.decrypt(data.password,data.userId).toString(CryptoJS.enc.Utf8);
@@ -113,9 +112,23 @@ export default function OneTapLogin(props) {
         dispatch({type:ACTIONS.TOGGLE_REMV_BTN})
     }
 
-    const switchToLoginScreen=()=>{
-        const pwd=CryptoJS.AES.decrypt(oneTapStorageDetails[0].password,oneTapStorageDetails[0].id).toString(CryptoJS.enc.Utf8);
-        props.setLoginCred(oneTapStorageDetails[0].name,pwd);
+    const switchToLoginScreen=async()=>{
+        dispatch({type:ACTIONS.SHOW_AUTH_LOADER});
+        try{
+            const docSnap=await getDoc(doc(userDbRef,oneTapStorageDetails[0].id));
+            if(docSnap.exists()){
+                const data=docSnap.data();
+                const pwd=CryptoJS.AES.decrypt(data.password,data.userId).toString(CryptoJS.enc.Utf8);
+                dispatch({type:ACTIONS.HIDE_AUTH_LOADER});
+                props.setLoginCred(oneTapStorageDetails[0].name,pwd);
+            }
+            else throw new Error();
+            
+        }
+        catch(err){
+                dispatch({type:ACTIONS.HIDE_AUTH_LOADER});
+                props.setLoginCred("","");
+        }    
     }
 
     useEffect(()=>{

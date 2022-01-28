@@ -5,7 +5,7 @@ import phoneConfrmLogo from "../images/app_logo/phone_confrm_code.png";
 import FormInput  from "./FormInput";
 import {userDbRef,auth,db} from "../lib/Firebase";
 import {getDocs,query, where,setDoc,doc,} from "firebase/firestore";
-import { genNRandmDigit,codeResendSpan} from "../constants/constants";
+import { genNRandmDigit,codeResendSpan, changeWebLocation} from "../constants/constants";
 import emailjs from '@emailjs/browser';
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import createUser from "../helpers/User";
@@ -163,14 +163,14 @@ class SignupUserInfoConfrmPart extends React.Component{
             const email=`${this.props.inputs.emailOrPhone}@email.com`;
             const userCredential= await createUserWithEmailAndPassword(auth,email,this.props.inputs.password);
             const pwd=CryptoJS.AES.encrypt(this.props.inputs.password,userCredential.user.uid).toString();
-            const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username,email,
+            const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username.toLowerCase(),email,
                                     this.props.inputs.emailOrPhone,this.props.userImgurl,this.props.getUserBirthday(),
                                     "phone");
             await setDoc(doc(db, "users", userCredential.user.uid), user);
             console.log(userCredential,"user created",user);
             // move to home page (implement)
             this.context.setCurrentUser(userCredential.user);
-            this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
+            window.location.reload();
         }
         catch(err){
             console.log(err);
@@ -185,16 +185,17 @@ class SignupUserInfoConfrmPart extends React.Component{
             const userCredential= await createUserWithEmailAndPassword(auth,this.props.inputs.emailOrPhone,this.props.inputs.password);
             console.log(userCredential);
             const pwd=CryptoJS.AES.encrypt(this.props.inputs.password,userCredential.user.uid).toString();
-            const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username,
+            const user=createUser(userCredential.user.uid,pwd,this.props.inputs.fullname,this.props.inputs.username.toLowerCase(),
                                     this.props.inputs.emailOrPhone,"",this.props.userImgurl,this.props.getUserBirthday(),
                                     "email");
             await setDoc(doc(db, "users", userCredential.user.uid), user);
             console.log("ueser created" );
             // move to home page (implement)
             this.context.setCurrentUser(userCredential.user);
-            this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
+            window.location.reload();
         }
         catch(err){
+            console.log(err)
             this.isFormSubmitted=false;
             this.props.resetShowSpinner();
             this.setState({verificationMsg:"Sorry,something went wrong creating your account. Please try again soon."})

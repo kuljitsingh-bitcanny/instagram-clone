@@ -5,8 +5,9 @@ import Signup from "./components/signup";
 import ForgotPwd from "./components/ForgotPwd";
 import UserAuth from "./components/UserAuth";
 import LoadingScreen from "./components/LoadingScreen";
-import Home from "./components/Home";
+import Home from "./components/HomeContext";
 import OneTapLogin from "./components/OneTapLogin";
+import HomePage from "./components/HomePage";
 
 
 export const DISPLAY_MODE={
@@ -63,7 +64,11 @@ class App extends React.Component{
       case DISPLAY_MODE.AUTH_MODE:
           return <UserAuth/>
       case DISPLAY_MODE.HOME_MODE:
-            return <Home/>
+            return (
+              <Home>
+                  <HomePage/>
+              </Home>
+            )
       default:
         return <LoadingScreen/>
     }

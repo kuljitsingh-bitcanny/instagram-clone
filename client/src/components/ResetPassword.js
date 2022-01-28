@@ -11,12 +11,11 @@ import { auth, forgotPwdDbRef, userDbRef } from '../lib/Firebase';
 import CryptoJS from 'crypto-js';
 import { deleteDoc, doc, setDoc, updateDoc ,getDoc} from 'firebase/firestore';
 import { invalidToken,changeWebLocation,getEncryptedToken } from '../constants/constants';
-import {createExistingUser} from '../helpers/User';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword} from 'firebase/auth';
 
 
 export default function ResetPassword({user,setMode,setInvalidTokenMsg,token,oneClickLogin}) {
-    const {changeDisplayMode,checkAndChangeDisplayMode}=useContext(AuthContext);
+    const {setCurrentUser}=useContext(AuthContext);
     const [passwords,setPasswords]=useState({password1:"",password2:""});
     const [invalidPwdMsg,setInvalidPwdMsg]=useState("");
     const [showSpinner,setShowSpinner]=useState(false);
@@ -81,6 +80,8 @@ export default function ResetPassword({user,setMode,setInvalidTokenMsg,token,one
             const resp=await fetch(url,{method:"POST",headers: {'Content-Type': 'application/json'},body: JSON.stringify(reqData)});
             const data=await resp.json();
             if(!data.status) throw new Error();
+            const userCrediential=await signInWithEmailAndPassword(auth,user.email,passwords.password1);
+            setCurrentUser(userCrediential.user);
             await updateUserPasswordInDb();
             console.log(data);
         }catch(err){

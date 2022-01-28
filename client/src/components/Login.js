@@ -14,6 +14,7 @@ import CryptoJS from "crypto-js";
 import ThirdpartyLoginScreenWrapper from "./ThirdpartyLoginScreenWrapper";
 import LoaderButton from "./LoaderButton";
 import { DISPLAY_MODE } from "../App";
+import { changeWebLocation } from "../constants/constants";
 
 
 const searchOutput={str:"str",obj:"obj"};
@@ -21,7 +22,8 @@ class Login extends React.Component{
     static contextType=AuthContext;
     constructor(props){
         super(props);
-        this.state={inputs:{emailOrPhoneOrUsername:this.props.username,password:this.props.password},showPwd:false,disableSubmitBtn:true,showSpinner:false,
+        this.state={inputs:{emailOrPhoneOrUsername:this.props.username,password:this.props.password},showPwd:false,showSpinner:false,
+                    disableSubmitBtn:!(this.props.username.length && this.props.password.length),
                     invalidMsg:"",isFacebookLogin:false,newUserInfo:{},showThirdpartyLoginOptn:false};
         this.isFormSubmitted=false;
     }
@@ -106,7 +108,7 @@ class Login extends React.Component{
                 console.log(userCredential,"user creaiential")
                 this.setState({showSpinner:false})
                 //move to home page
-                this.context.changeDisplayMode(DISPLAY_MODE.HOME_MODE);
+                window.location.reload();
             }
             catch(err){
                 this.setState({invalidMsg:"Sorry,something went wrong logging your account. Please try again soon."})

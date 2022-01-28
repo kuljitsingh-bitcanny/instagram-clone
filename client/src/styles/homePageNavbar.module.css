@@ -1,0 +1,255 @@
+.navbarMainCont{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    z-index:100;
+    background-color: #fafafa;
+    padding:1rem 0.75rem;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    
+
+}
+.navbarMainCont > div{
+    width: 100%;
+    /* background-color: red; */
+    max-width: 935px;
+    margin:0 auto;
+    height: 42px;
+}
+.navbarMainCont button{
+    border:0;
+    outline:none;
+
+}
+.navbarMainCont .logoBtn img{
+    width: 144px;
+    height: 36px;
+    transform: scale(0.9);
+}
+
+.userSearchContainer{
+    padding: 0 !important;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 296px !important;
+    margin:0.25rem auto;
+    
+}
+.userSearchContainer .resetBtn,
+.userSearchContainer .searchBtn{
+    background-color: rgba(109, 109, 109, 0.685);
+    position: absolute;
+    top:50%;
+    width:20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:0.125rem 0.25rem;
+    transform: translateY(-50%);
+    border-radius: 50%;
+
+}
+.userSearchContainer .resetBtn{
+    right:0.375rem;
+}
+.userSearchContainer .resetBtn{
+    display: none;
+}
+.userSearchContainer .resetBtn svg{
+    fill:#fff;
+    pointer-events: none;
+}
+.userSearchContainer .searchBtn,
+.userSearchContainer .searchBtn svg{
+    pointer-events: none;
+}
+.userSearchContainer .searchBtn{
+    background-color: transparent;
+    width: 36px;
+    height: 36px;
+}
+.userSearchContainer input{
+    padding:0.6255rem 0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    border:0;
+    background-color: rgb(228, 228, 228);
+    color:#666;
+    font-size: 0.875rem;
+    outline: none;
+    border-radius: 8px;
+}
+.userSearchContainer input:focus{
+    padding-left: 1rem;
+    padding-right:2.25rem;
+    color:#000;
+}
+.extraPaddedInput{
+    padding-left:2.5rem !important;
+}
+.userSearchContainer input:focus + button{
+    display: none;
+}
+.showResetBtn {
+    display: flex !important;
+}
+.userSearchContainer .searchLoaderCont{
+    position: absolute;
+    top:50%;
+    right:-2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:0.125rem 0.25rem;
+    transform: translateY(-50%);
+    border-radius: 50%;
+}
+.userProfileImg{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.userOptnsBtn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.userOptnsBtn button{
+    margin:0rem 0.25rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.userOptnsBtn i{
+    font-size: 1.25rem;
+    pointer-events: none;
+    color:#333;
+    
+}
+.searchResultCont{
+    position: fixed;
+    top:74px;
+    left:50%;
+    transform: translateX(-50%);
+    width:375px;
+    height:362px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    padding: 0.875rem 0rem;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    overflow-y: auto;
+    background-color: #fafafa;
+}
+/* .emptyResultCont{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+} */
+.emptyResultCont{
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    color:#666;
+}
+.searchResultLoader{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.searchResWrapper{
+    display: flex;
+    flex-direction: column;
+    padding:0.5rem 0.5rem;
+    width: 100%;
+}
+.searchResWrapper > div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin:0.375rem 0rem;
+}
+.searchResWrapper .searchRes{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    flex-grow: 1;
+
+}
+.searchResWrapper .searchRes img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fafafa;
+    padding: 0.125rem;
+}
+.searchResWrapper .searchRes .imgWrapper{
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-image: linear-gradient(to left,rgb(252, 80, 109), rgb(157, 255, 0));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.searchResWrapper .searchRes .userInfo{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left:0.5rem;
+    justify-content: center;
+}
+.searchResWrapper .searchRes .userInfo span{
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.searchResWrapper .searchRes .userInfo span:first-child{
+    font-weight: 600;
+    
+    
+}
+.searchResWrapper .searchRes .userInfo span:last-child{
+    color:#666;
+    margin-top:-3px;
+    font-size: 0.8125rem;
+}
+.searchResWrapper > div .delBtn{
+    width: 28px !important;
+    height: 28px !important;
+    cursor: pointer !important;
+    margin:0rem 0.25rem !important;
+}
+.searchResWrapper > div .delBtn svg{
+    fill:#666 !important;
+    pointer-events: none !important;
+}
+
+@media screen and (max-width:660px) {
+    .userSearchContainer{
+           display: none; 
+           margin-bottom: 0;
+    }
+    .userOptnsBtnCont{
+        display: none; 
+ } 
+}

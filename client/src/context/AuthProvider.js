@@ -3,7 +3,7 @@ import firebase,{auth,db,onAuthStateChanged, userDbRef,oneTapStorageDbRef} from 
 import { addDoc, doc, getDoc } from "firebase/firestore";
 import LoadingScreen from "../components/LoadingScreen";
 import { DISPLAY_MODE } from "../App";
-import { oneTapStorage,idStartIndx, idLen } from "../constants/constants";
+import { oneTapStorage,idStartIndx, idLen, maxUserStorageAllwd } from "../constants/constants";
 
 
 const AuthContext=React.createContext();
@@ -14,7 +14,8 @@ class AuthProvider extends React.Component{
         this.state={
             value:{firebase:firebase,currentUser:null,setCurrentUser:this.checkAndSetCurrentUser,curMode:"",
                     changeDisplayMode:this.changeDisplayMode,checkAndChangeDisplayMode:this.checkAndChangeDisplayMode,
-                    oneTapStorageDetails:[],oneTapStorageId:"",updateOneTapStorage:this.updateOneTapStorage},
+                    oneTapStorageDetails:[],oneTapStorageId:"",updateOneTapStorage:this.updateOneTapStorage,
+                    addOneTapStorageId:this.addOneTapStorageId},
             isUserDataLoaded:false,
         }
         this.oneTabStorageToken=window.localStorage.getItem(oneTapStorage) || "";
@@ -82,13 +83,26 @@ class AuthProvider extends React.Component{
     componentDidMount(){
         this.checkAndLoadOneTapUserDetails();  
     }
+    addOneTapStorageId=(id)=>{
+        this.setState((state)=>{
+            return {value:{...state.value,oneTapStorageId:id}}
+        });
+        this.oneTabStorageToken=window.localStorage.getItem(oneTapStorage) || "";
+    }
     updateOneTapStorage=(id)=>{
-        const newStorageArr=this.state.value.oneTapStorageDetails.filter((detail)=>detail.id!==id);
+        let newStorageArr=this.state.value.oneTapStorageDetails.filter((detail)=>detail.id!==id);
+        if(newStorageArr.length === this.state.value.oneTapStorageDetails.length){
+            const userDetails={id:this.state.value.currentUser.userId,imgUrl:this.state.value.currentUser.imgUrl,
+                                name:this.state.value.currentUser.username,provider:this.state.value.currentUser.provider};
+            newStorageArr=[userDetails,...newStorageArr];
+            if(newStorageArr.length>maxUserStorageAllwd) newStorageArr.pop();
+        }
+        console.log("new storage",newStorageArr);
         this.setState((state)=>{
             return {value:{...state.value,oneTapStorage:[...newStorageArr]}};
         })
-
     }    
+    
     render(){
         return (
             <AuthContext.Provider value={this.state.value}>

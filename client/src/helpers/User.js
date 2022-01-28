@@ -1,10 +1,11 @@
+import { generateKeywords } from "../constants/constants";
 
 
 export default function createUser(userId,password,fullname,username,email,phone,imgUrl,birthday,provider){
     const user={
         userId,
         password,
-        username,
+        username:username.toLowerCase(),
         fullname,
         email,
         phone,
@@ -15,7 +16,8 @@ export default function createUser(userId,password,fullname,username,email,phone
         imgUrl,
         followingCount:0,
         followersCount:0,
-        provider
+        provider,
+        keywords:generateKeywords(username.toLowerCase()),
     }
     return user;
 }
