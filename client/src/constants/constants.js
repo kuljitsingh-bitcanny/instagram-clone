@@ -18,6 +18,10 @@ const oneTapStorage="oneTapStorage";
 const searchDelay=1000;
 const blurringDelay=250;
 const maxUserStorageAllwd=4;
+const maxAllowdUserFetch=20;
+const maxOneTimePostuploadLimit=5;
+const maxCaptnChar=500;
+const isFacbookLogin=true;
 const genNRandmDigit=(n)=>{
     const min=10**(n-1);
     const max=((10**n)-1);
@@ -36,7 +40,7 @@ const parseQueryString=(queryString)=>{
     return queryObj;
 }
 const changeWebLocation=(loc)=>{
-    window.location=loc;
+    window.location.replace(loc)
 }
 
 const getEncryptedToken=(id)=>{
@@ -57,11 +61,73 @@ const generateKeywords=(name)=>{
     return [...keywords];
 }
 
+const handleDragMove=(prevTransx,curTransx,initTransx,getOverflowInfo)=>{
+    const diff=curTransx-initTransx;
+    const [isOverflow,maxDiff]=getOverflowInfo();
+    if(isOverflow){
+        prevTransx+=diff;
+        if(prevTransx>0) prevTransx=0;
+        if(prevTransx<maxDiff) prevTransx=maxDiff;
+    }
+    return prevTransx;
+
+}
+const handleDragUp=(curTransx,normalWidth,paddedWidth,getOverflowInfo)=>{
+    let showNextBtn=false;
+    let showPrevBtn=false;
+    const [isOverFlow,diff]=getOverflowInfo();
+    if(isOverFlow){
+        const nextTrans=Math.round(curTransx/normalWidth)*paddedWidth;
+        const maxTrans=diff;
+        if(maxTrans>nextTrans){
+            showNextBtn=false;
+            showPrevBtn=true;
+        }
+        else if(nextTrans>=0){
+            showPrevBtn=false;
+            showNextBtn=true;
+        }
+        else{
+            showNextBtn=true;
+            showPrevBtn=true;
+        }
+        curTransx=maxTrans>nextTrans?maxTrans:nextTrans;
+    }
+    return {curTransx,showNextBtn,showPrevBtn};
+}
+const handleLeftScrollBtnClick=(curTransx,paddedWidth,getOverflowInfo)=>{
+    let showPrevBtn=true;
+    const [isOverFlow]=getOverflowInfo();
+    if(isOverFlow){
+        const nextTrans=(1 * paddedWidth);
+        curTransx+=nextTrans;
+        if(curTransx>0){
+            curTransx=0;
+            showPrevBtn=false;
+        }
+    }
+    return {curTransx,showPrevBtn};
+}
+const handleRightScrollBtnClick=(curTransx,paddedWidth,getOverflowInfo)=>{
+    let showNextBtn=true;
+    const [isOverFlow,diff]=getOverflowInfo();
+    if(isOverFlow){
+        const nextTrans=(-1 * paddedWidth);
+        const maxTrans=diff;
+        curTransx+=nextTrans;
+        if(maxTrans>curTransx){
+            curTransx=maxTrans;
+            showNextBtn=false;
+        }
+    }
+    return {curTransx,showNextBtn};
+}
 
 
 
 
-
-export {months,yearSpan,minYearDiff,codeResendSpan,defaultImgUrl,maxReqAllwd,nameMinLen,nameMaxLen,idStartIndx,idLen,
-        resetPasswordMode,tokenLen,invalidToken,loggingUser,oneTapStorage,searchDelay,blurringDelay,maxUserStorageAllwd,genNRandmDigit,
-        getEncryptedToken,changeWebLocation,generateKeywords,parseQueryString};
+export {months,yearSpan,minYearDiff,codeResendSpan,defaultImgUrl,maxReqAllwd,nameMinLen,nameMaxLen,idStartIndx,idLen,maxOneTimePostuploadLimit,
+        resetPasswordMode,tokenLen,invalidToken,loggingUser,oneTapStorage,searchDelay,blurringDelay,maxUserStorageAllwd,maxAllowdUserFetch,
+        maxCaptnChar,isFacbookLogin,
+        getEncryptedToken,changeWebLocation,generateKeywords,parseQueryString,genNRandmDigit,handleDragMove,handleDragUp,handleRightScrollBtnClick,
+        handleLeftScrollBtnClick};

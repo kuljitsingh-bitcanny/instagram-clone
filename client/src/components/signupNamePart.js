@@ -7,14 +7,14 @@ import {userDbRef} from "../lib/Firebase";
 import {getDocs,query, where} from "firebase/firestore";
 import { SignupMode } from "./signup";
 import ThirdpartyLoginbtn from "./ThirdpartyLoginBtn";
-import {defaultImgUrl,nameMinLen,nameMaxLen} from "../constants/constants";
+import {defaultImgUrl,nameMinLen,nameMaxLen, isFacbookLogin} from "../constants/constants";
 import LoaderButton from "./LoaderButton";
 
 
 class SignupNamePart extends React.Component{
     constructor(props){
         super(props);
-        this.state={showPwd:false,disableSubmitBtn:true,hasFinalErr:false,finalErrMsg:"",isFacebookLogin:false};
+        this.state={showPwd:false,disableSubmitBtn:true,hasFinalErr:false,finalErrMsg:"",isFacebookLogin:isFacbookLogin};
         this.lastSubmittedInput=undefined;
         this.isFormSubmitted=false;
     }

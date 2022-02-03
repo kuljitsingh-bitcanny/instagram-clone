@@ -5,9 +5,9 @@ import Signup from "./components/signup";
 import ForgotPwd from "./components/ForgotPwd";
 import UserAuth from "./components/UserAuth";
 import LoadingScreen from "./components/LoadingScreen";
-import Home from "./components/HomeContext";
+import HomeProvider from "./reduxComponents/HomeContext";
 import OneTapLogin from "./components/OneTapLogin";
-import HomePage from "./components/HomePage";
+import HomePage from "./reduxComponents/HomePage";
 
 
 export const DISPLAY_MODE={
@@ -65,9 +65,9 @@ class App extends React.Component{
           return <UserAuth/>
       case DISPLAY_MODE.HOME_MODE:
             return (
-              <Home>
+              <HomeProvider>
                   <HomePage/>
-              </Home>
+              </HomeProvider>
             )
       default:
         return <LoadingScreen/>

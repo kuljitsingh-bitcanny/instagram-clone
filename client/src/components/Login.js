@@ -14,7 +14,7 @@ import CryptoJS from "crypto-js";
 import ThirdpartyLoginScreenWrapper from "./ThirdpartyLoginScreenWrapper";
 import LoaderButton from "./LoaderButton";
 import { DISPLAY_MODE } from "../App";
-import { changeWebLocation } from "../constants/constants";
+import { changeWebLocation, isFacbookLogin } from "../constants/constants";
 
 
 const searchOutput={str:"str",obj:"obj"};
@@ -24,7 +24,7 @@ class Login extends React.Component{
         super(props);
         this.state={inputs:{emailOrPhoneOrUsername:this.props.username,password:this.props.password},showPwd:false,showSpinner:false,
                     disableSubmitBtn:!(this.props.username.length && this.props.password.length),
-                    invalidMsg:"",isFacebookLogin:false,newUserInfo:{},showThirdpartyLoginOptn:false};
+                    invalidMsg:"",isFacebookLogin:isFacbookLogin,newUserInfo:{},showThirdpartyLoginOptn:false};
         this.isFormSubmitted=false;
     }
     handleSubmit=(e)=>{

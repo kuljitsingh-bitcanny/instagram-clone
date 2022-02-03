@@ -1,0 +1,41 @@
+.dragMoveCont{
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.dragMoveCont .leftScrollBtn,
+.dragMoveCont .rightScrollBtn{
+    position: absolute;
+    top:50%;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(44, 44, 44, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    border:0;
+    outline: none;
+    z-index: 100;
+    
+}
+.dragMoveCont .leftScrollBtn i,
+.dragMoveCont .rightScrollBtn i{
+    color:#fff !important;
+    pointer-events: none !important;
+    font-size: 1.25rem !important;
+    position: relative !important;
+}
+.dragMoveCont .leftScrollBtn i{
+    left:-1px;
+}
+.dragMoveCont .rightScrollBtn i{
+    right:-1px;
+}
+.dragMoveCont .leftScrollBtn{
+    left:0.25rem;
+}
+.dragMoveCont .rightScrollBtn{
+    right:0.25rem;
+}

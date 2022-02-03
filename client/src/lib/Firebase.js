@@ -22,6 +22,7 @@ const firebaseConfig = {
   const userDbRef=collection(db,'users');
   const forgotPwdDbRef=collection(db,"forgotpwd");
   const oneTapStorageDbRef=collection(db,"oneTapStorage");
+  const postsDbRef=collection(db,"posts");
 
   export default app;
-  export {userDbRef,auth,db,forgotPwdDbRef,oneTapStorageDbRef,onAuthStateChanged};
+  export {userDbRef,auth,db,forgotPwdDbRef,oneTapStorageDbRef,postsDbRef,onAuthStateChanged};
